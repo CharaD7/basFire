@@ -39,12 +39,11 @@
                 />
               </div>
             </div>
-          <Button class="bg-indigo-500 text-white hover:bg-indigo-600 w-full" type="submit" @click="handleLogin">Login</Button>
+            <Button class="bg-indigo-500 text-white hover:bg-indigo-600 w-full" type="submit" @click="handleLogin">Login</Button>
           </form>
         </CardContent>
 
         <CardFooter class="flex justify-between">
-          <!-- <Button variant="outline" @click="navigateToSignup">Sign Up</Button> -->
           <p class="text-sm text-muted-foreground">
             Don't have an account? <NuxtLink class="text-blue-500 hover:underline" to="/signup">Sign Up</NuxtLink>
           </p>
@@ -52,23 +51,68 @@
       </Card>
     </div>
   </div>
+  <div class="fixed top-4 right-4 z-50">
+    <TransitionGroup name="alert">
+      <Alert v-if="showSuccessAlert" key="success" variant="success" class="mb-2 border-2 rounded-md p-2 border-green-500 text-green-500">
+        <AlertCircle class="w-4 h-4" />
+        <AlertTitle>Success</AlertTitle>
+        <AlertDescription>
+          Login successful! Redirecting to dashboard...
+        </AlertDescription>
+      </Alert>
+      <Alert v-if="showErrorAlert" key="error" variant="destructive" class="mb-2 border-2 rounded-md p-2 border-red-500 text-red-500">
+        <AlertCircle class="w-4 h-4" />
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription>
+          {{ errorMessage }}
+        </AlertDescription>
+      </Alert>
+    </TransitionGroup>
+  </div>
 </template>
 
 <script setup lang="ts">
 
-  const { login } = useAuth();
+const { login } = useAuth();
 
-  const email = ref('');
-  const password = ref('');
+const email = ref('');
+const password = ref('');
+const showSuccessAlert = ref(false);
+const showErrorAlert = ref(false);
+const errorMessage = ref('');
 
-  const handleLogin = async () => {
-    try {
-      const userCredentials = await login(email.value, password.value);
-      console.log('userCredentials', userCredentials);
-      navigateTo('/dashboard');
-    } catch (error) {
-      console.error('Login Error:', error);
+const handleLogin = async () => {
+  try {
+    const userCredentials = await login(email.value, password.value);
+    if (userCredentials) {
+      showSuccessAlert.value = true;
+      setTimeout(() => {
+        navigateTo('/dashboard');
+      }, 1500);
     }
-  };
-
+  } catch (error) {
+    console.error('Login Error:', error);
+    showErrorAlert.value = true;
+    errorMessage.value = ': Invalid email or password. Please try again.';
+    email.value = '';
+    password.value = '';
+  } finally {
+    setTimeout(() => {
+      showSuccessAlert.value = false;
+      showErrorAlert.value = false;
+    }, 3000);
+  }
+};
 </script>
+
+<style scoped>
+.alert-enter-active,
+.alert-leave-active {
+  transition: all 0.3s ease;
+}
+.alert-enter-from,
+.alert-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+</style>
