@@ -10,6 +10,9 @@ dist
 neovide.log
 nohup.out
 
+# vscode
+.vscode/
+
 # Node dependencies
 node_modules
 
