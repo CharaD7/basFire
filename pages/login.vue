@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-4 flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="mx-auto p-4 flex items-center justify-center min-h-screen bg-gray-100">
     <div
       class="transform -translate-y-4"
       :style="{ transition: 'opacity 0.5s, transform 0.5s' }"
@@ -39,7 +39,7 @@
                 />
               </div>
             </div>
-            <Button class="bg-indigo-500 text-white hover:bg-indigo-600 w-full" type="submit" @click="handleLogin">Login</Button>
+            <Button class="bg-indigo-500 text-white hover:bg-indigo-600 w-full hover:cursor-pointer" type="submit" @click="handleLogin">Login</Button>
           </form>
         </CardContent>
 
@@ -53,15 +53,13 @@
   </div>
   <div class="fixed top-4 right-4 z-50">
     <TransitionGroup name="alert">
-      <Alert v-if="showSuccessAlert" key="success" variant="success" class="mb-2 border-2 rounded-md p-2 border-green-500 text-green-500">
-        <AlertCircle class="w-4 h-4" />
+      <Alert v-if="showSuccessAlert" key="success" variant="default" class="mb-2 border-2 rounded-md p-2 border-green-500 text-green-500">
         <AlertTitle>Success</AlertTitle>
         <AlertDescription>
           Login successful! Redirecting to dashboard...
         </AlertDescription>
       </Alert>
       <Alert v-if="showErrorAlert" key="error" variant="destructive" class="mb-2 border-2 rounded-md p-2 border-red-500 text-red-500">
-        <AlertCircle class="w-4 h-4" />
         <AlertTitle>Error</AlertTitle>
         <AlertDescription>
           {{ errorMessage }}
@@ -93,7 +91,7 @@ const handleLogin = async () => {
   } catch (error) {
     console.error('Login Error:', error);
     showErrorAlert.value = true;
-    errorMessage.value = ': Invalid email or password. Please try again.';
+    errorMessage.value = 'Invalid email or password. Please try again.';
     email.value = '';
     password.value = '';
   } finally {
