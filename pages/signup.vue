@@ -11,7 +11,7 @@
         </CardHeader>
 
         <CardContent>
-          <form @submit.prevent="handleSignUp" class="space-y-4">
+          <form @submit.prevent="handleSignUp" class="space-y-4" @keyup.enter="handleSignUp">
             <div class="grid w-full items-center gap-4">
               <!-- Email field -->
               <div class="flex mb-4 flex-col space-y-1.5">
@@ -55,7 +55,7 @@
             <Button
               type="submit"
               class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 hover:cursor-pointer"
-               @click="handleSignUp"
+              @click="handleSignUp"
             >Sign Up</Button>
           </form>
         </CardContent>

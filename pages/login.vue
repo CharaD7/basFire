@@ -11,7 +11,7 @@
         </CardHeader>
 
         <CardContent>
-          <form @submit.prevent="handleLogin" class="space-y-4">
+          <form @submit.prevent="handleLogin" class="space-y-4" @keyup.enter="handleLogin">
             <div class="grid w-full items-center gap-4">
               <!-- Email field -->
               <div class="flex mb-4 flex-col space-y-1.5">
