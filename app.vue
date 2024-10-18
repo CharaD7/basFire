@@ -3,9 +3,19 @@
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
-    <h1 class="text-center text-3xl">Welcome here</h1>
   </div>
 </template>
 
 <script setup>
+
+const router = useRouter();
+const { $currentUser } = useNuxtApp();
+
+onMounted(() => {
+  if ($currentUser.value) {
+    router.push('/dashboard');
+  } else {
+    router.push('/login');
+  }
+});
 </script>
