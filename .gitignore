@@ -7,7 +7,6 @@
 dist
 
 # neovide logs
-neovide.log
 nohup.out
 
 # vscode
