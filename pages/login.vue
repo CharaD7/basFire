@@ -70,8 +70,7 @@
 </template>
 
 <script setup lang="ts">
-
-const { login } = useAuth();
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const email = ref('');
 const password = ref('');
@@ -81,7 +80,8 @@ const errorMessage = ref('');
 
 const handleLogin = async () => {
   try {
-    const userCredentials = await login(email.value, password.value);
+    const auth = useNuxtApp().$auth;
+    const userCredentials = await signInWithEmailAndPassword(auth, email.value, password.value);
     if (userCredentials) {
       showSuccessAlert.value = true;
       setTimeout(() => {
