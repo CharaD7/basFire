@@ -3,7 +3,7 @@
     <h1 class="text-3xl font-bold mb-4">Dashboard</h1>
     <p v-if="user" class="mb-4">Welcome to your dashboard, {{ displayName }}!</p>
     <p v-else>Loading user information...</p>
-    <Button @click="handleLogout" class="bg-red-500 text-white hover:bg-red-600">Logout</Button>
+    <Button @click="handleLogout" class="bg-red-500 text-white hover:bg-red-600 hover:cursor-pointer">Logout</Button>
   </div>
 </template>
 
