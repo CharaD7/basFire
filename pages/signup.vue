@@ -87,45 +87,45 @@
 </template>
 
 <script setup lang="ts">
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
-const email = ref('')
-const password = ref('')
-const confirmPassword = ref('')
-const showSuccessAlert = ref(false)
-const showErrorAlert = ref(false)
-const errorMessage = ref('')
+const email = ref('');
+const password = ref('');
+const confirmPassword = ref('');
+const showSuccessAlert = ref(false);
+const showErrorAlert = ref(false);
+const errorMessage = ref('');
 
 const handleSignUp = async () => {
   if (password.value !== confirmPassword.value) {
-    showErrorAlert.value = true
-    errorMessage.value = 'Passwords do not match'
-    return
+    showErrorAlert.value = true;
+    errorMessage.value = 'Passwords do not match';
+    return;
   }
 
   try {
-    const auth = getAuth()
-    await createUserWithEmailAndPassword(auth, email.value, password.value)
-    showSuccessAlert.value = true
+    const auth = useNuxtApp().$auth;
+    await createUserWithEmailAndPassword(auth, email.value, password.value);
+    showSuccessAlert.value = true;
     setTimeout(() => {
-      navigateTo('/dashboard')
-    }, 2000)
+      navigateTo('/dashboard');
+    }, 2000);
   } catch (error: any) {
-    showErrorAlert.value = true
-    errorMessage.value = getErrorMessage(error)
+    showErrorAlert.value = true;
+    errorMessage.value = getErrorMessage(error);
   }
-}
+};
 
 const getErrorMessage = (error: any): string => {
   switch (error.code) {
     case 'auth/email-already-in-use':
-      return 'This email is already in use'
+      return 'This email is already in use';
     case 'auth/invalid-email':
-      return 'Invalid email address'
+      return 'Invalid email address';
     case 'auth/weak-password':
-      return 'Password is too weak'
+      return 'Password is too weak';
     default:
-      return 'An error occurred during sign up'
+      return 'An error occurred during sign up';
   }
 }
 </script>
