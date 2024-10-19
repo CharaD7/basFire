@@ -6,12 +6,12 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   const app = initializeApp({
     apiKey: config.public.firebaseApiKey,
-    authDomain: config.public.firebaseAuthDomain,
-    projectId: config.public.firebaseProjectId,
-    databaseURL: config.public.firebaseDatabaeURL,
-    messagingSenderId: config.public.firebaseMessagingSenderId,
-    appId: config.public.firebaseAppId,
-    storageBucket: config.public.firebaseStorageBucket
+    authDomain: config.public.firebaseAuthDomain as string,
+    projectId: config.public.firebaseProjectId as string,
+    databaseURL: config.public.firebaseDatabaseURL as string,
+    messagingSenderId: config.public.firebaseMessagingSenderId as string,
+    appId: config.public.firebaseAppId as string,
+    storageBucket: config.public.firebaseStorageBucket as string
   });
   const auth = getAuth(app);
   const currentUser = ref<User | null>(null);
