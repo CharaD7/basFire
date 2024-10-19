@@ -3,21 +3,24 @@
     <h1 class="text-3xl font-bold mb-4">Dashboard</h1>
     <p v-if="user" class="mb-4">Welcome to your dashboard, {{ displayName }}!</p>
     <p v-else>Loading user information...</p>
-    <Button @click="handleLogout" class="bg-red-500 text-white hover:bg-red-600 hover:cursor-pointer">Logout</Button>
+    <Button @click="handleLogout" class="bg-red-500 text-white hover:bg-red-600">Logout</Button>
   </div>
 </template>
 
 <script setup>
-import { getAuth, updateProfile } from 'firebase/auth';
+import { getAuth, updateProfile, onAuthStateChanged } from 'firebase/auth';
 
 const { logout } = useAuth();
-const user = ref(null);
+const { $currentUser } = useNuxtApp();
+const user = ref($currentUser.value);
 const displayName = ref('');
+const router = useRouter();
 
 const handleLogout = async () => {
   try {
     await logout();
-    navigateTo('/login');
+    auth.signOut();
+    router.push('/login');
   } catch (error) {
     console.error('Logout Error:', error);
   }
@@ -27,32 +30,26 @@ const setDisplayName = (email) => {
   return email.replace(/@.*$/,"");
 };
 
-onMounted(async () => {
-  const auth = getAuth();
-  const currentUser = auth.currentUser;
+const auth = getAuth();
 
-  if (currentUser) {
-    user.value = currentUser;
-    if (!currentUser.displayName) {
-      const newDisplayName = setDisplayName(currentUser.email);
+if (user.value) {
+  displayName.value = user.value.displayName || setDisplayName(user.value.email);
+}
+
+onAuthStateChanged(auth, async (firebaseUser) => {
+  if (firebaseUser) {
+    user.value = firebaseUser;
+    if (!firebaseUser.displayName) {
+      const newDisplayName = setDisplayName(firebaseUser.email);
       try {
-        await updateProfile(currentUser, { displayName: newDisplayName });
+        await updateProfile(firebaseUser, { displayName: newDisplayName });
         console.log('Display name updated successfully');
       } catch (error) {
         console.error('Error updating display name:', error);
       }
     }
-    displayName.value = currentUser.displayName || setDisplayName(currentUser.email);
-  } else {
-    // If no user is logged in, redirect to login page
-    navigateTo('/login');
+    displayName.value = firebaseUser.displayName || setDisplayName(firebaseUser.email);
   }
-
-  auth.onAuthStateChanged((firebaseUser) => {
-    if (firebaseUser) {
-      user.value = firebaseUser;
-      displayName.value = firebaseUser.displayName || setDisplayName(firebaseUser.email).replace(/@.*$/,"");
-    }
-  });
 });
+
 </script>
