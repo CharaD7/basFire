@@ -1,13 +1,11 @@
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut,
 } from "firebase/auth";
 import type { User, UserCredential } from "firebase/auth";
 
 export const useAuth = () => {
-  const { $auth, $currentUser } = useNuxtApp()
+  const { $auth } = useNuxtApp()
 
   const signUp = async (email: string, password: string): Promise<{ user: User; uid: string }> => {
     try {
@@ -22,9 +20,9 @@ export const useAuth = () => {
     }
   };
 
-  const login = async (email: string, password: string): Promise<{ user: User; uid: string }> => {
+  const login = async (email: string, password: string ): Promise<{ user: User; uid: string }> => {
     try {
-      const userCredential = await signInWithEmailAndPassword($auth, email, password);
+      const userCredential: UserCredential = await signInWithEmailAndPassword($auth, email, password);
       return {
         user: userCredential.user,
         uid: userCredential.user.uid
@@ -35,18 +33,8 @@ export const useAuth = () => {
     }
   };
 
-  const logout = async (): Promise<void> => {
-    try {
-      await signOut($auth);
-    } catch (error) {
-      console.error("Error Logging Out: ", error);
-      throw error;
-    }
-  };
-
   return {
     signUp,
     login,
-    logout
   };
 }
